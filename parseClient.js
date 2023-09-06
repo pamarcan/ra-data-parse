@@ -29,6 +29,7 @@ export default ({ URL, APP_ID, JAVASCRIPT_KEY }) => {
         const count = await query.count();
         query.limit(perPage);
         query.skip((page - 1) * perPage);
+        query.withCount();
 
         if (order === "DESC") query.descending(field);
         else if (order === "ASEC") query.ascending(field);
@@ -43,10 +44,10 @@ export default ({ URL, APP_ID, JAVASCRIPT_KEY }) => {
             query.equalTo(f, pointer);
           }
         });
-        const results = await query.find();
+        const result = await query.find();
         return {
-          total: count,
-          data: results.map((o) => ({ id: o.id, ...o.attributes })),
+          total: result.count,
+          data: result.results.map((o) => ({ id: o.id, ...o.attributes })),
         };
       }
       case GET_ONE: {
@@ -69,21 +70,20 @@ export default ({ URL, APP_ID, JAVASCRIPT_KEY }) => {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
         query.equalTo(params.target, params.id);
-        const count = await query.count();
+        query.withCount();
         query.limit(perPage);
         query.skip((page - 1) * perPage);
         if (order === "DESC") query.descending(field);
         else if (order === "ASEC") query.ascending(field);
 
-        const results = await query.find();
+        const result = await query.find();
         return {
-          total: count,
-          data: results.map((o) => ({ id: o.id, ...o.attributes })),
+          total: result.count,
+          data: result.results.map((o) => ({ id: o.id, ...o.attributes })),
         };
       }
       case CREATE: {
         const resObj = new resourceObj();
-        // Object.keys(params.data).map(key=>resObj.set(key, params.data[key]));
         try {
           const r = await resObj.save(params.data);
           return { data: { id: r.id, ...r.attributes } };
@@ -101,10 +101,9 @@ export default ({ URL, APP_ID, JAVASCRIPT_KEY }) => {
             r[f] = params.data[f];
             return r;
           }, {});
-          // console.log(obj);
+
           const r = await obj.save(data);
-          // console.log(r);
-          // console.log({data: {id: r.id, ...r.attributes}});
+
           return { data: { id: r.id, ...r.attributes } };
         } catch (error) {
           throw Error(error.toString());
