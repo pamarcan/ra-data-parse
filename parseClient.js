@@ -39,7 +39,7 @@ export default ({ URL, APP_ID, JAVASCRIPT_KEY }) => {
             const objectId = filter[f].value;
             const className = filter[f].className;
             const ClassObject = Parse.Object.extend(className);
-            const pointer = new ClassObject.createWithoutData(objectId);
+            const pointer = ClassObject.createWithoutData(objectId);
             query.equalTo(f, pointer);
           }
         });
