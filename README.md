@@ -74,7 +74,7 @@ Filters data that has references to the pointed object
 </List>
 ```
 
-Filters i dati
+Default filter
 
 ```javascript
 <List
