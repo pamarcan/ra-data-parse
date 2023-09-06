@@ -38,8 +38,8 @@ export default ({ URL, APP_ID, JAVASCRIPT_KEY }) => {
           } else if (filter[f].type === "reference") {
             const objectId = filter[f].value;
             const className = filter[f].className;
-            const Object = Parse.Object.extend(className);
-            const pointer = Object.createWithoutData(objectId);
+            const ClassObject = Parse.Object.extend(className);
+            const pointer = new ClassObject.createWithoutData(objectId);
             query.equalTo(f, pointer);
           }
         });
