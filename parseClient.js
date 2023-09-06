@@ -34,14 +34,14 @@ export default ({ URL, APP_ID, JAVASCRIPT_KEY }) => {
         if (order === "DESC") query.descending(field);
         else if (order === "ASEC") query.ascending(field);
         Object.keys(filter).map((f) => {
-          if (filter[f].type === "string") {
-            query.matches(f, filter[f].value, "i");
-          } else if (filter[f].type === "reference") {
+          if (filter[f].type === "reference") {
             const objectId = filter[f].value;
             const className = filter[f].className;
             const ClassObject = Parse.Object.extend(className);
             const pointer = ClassObject.createWithoutData(objectId);
             query.equalTo(f, pointer);
+          } else {
+            query.matches(f, filter[f], "i");
           }
         });
         const result = await query.find();

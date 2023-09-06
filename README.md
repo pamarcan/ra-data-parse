@@ -3,18 +3,19 @@
 A Parse data provider for
 [react-admin](https://github.com/marmelab/react-admin).
 
-
 ## Features
+
 All Data Provider Actions are supported including Authentication
-* `GET_LIST`
-* `GET_ONE`
-* `CREATE`
-* `UPDATE`
-* `UPDATE_MANY`
-* `DELETE`
-* `DELETE_MANY`
-* `GET_MANY`
-* `GET_MANY_REFERENCE`
+
+- `GET_LIST`
+- `GET_ONE`
+- `CREATE`
+- `UPDATE`
+- `UPDATE_MANY`
+- `DELETE`
+- `DELETE_MANY`
+- `GET_MANY`
+- `GET_MANY_REFERENCE`
 
 ## Installation
 
@@ -35,30 +36,66 @@ react-admin.
 //in app.js
 import React from "react";
 import { Admin, Resource } from "react-admin";
-import {ParseAuth, ParseClient} from 'ra-data-parse'
+import { ParseAuth, ParseClient } from "ra-data-parse";
 
 const parseConfig = {
-    URL: '',
-    JAVASCRIPT_KEY: '',
-    APP_ID: ''
-}
+  URL: "",
+  JAVASCRIPT_KEY: "",
+  APP_ID: "",
+};
 
 const dataProvider = ParseClient(parseConfig);
 
-const App = () => (
-  <Admin dataProvider={dataProvider}>
-    ...
-  </Admin>
-);
+const App = () => <Admin dataProvider={dataProvider}>...</Admin>;
 
 export default App;
 ```
 
+## Filter
+
+Filters data that has references to the pointed object
+
+```javascript
+<List
+  filter={{
+    classPointerName: {
+      type: "reference",
+      value: record.id,
+      className: "ClassName",
+    },
+  }}
+>
+  <Datagrid rowClick="edit">
+    <TextField source="action_name" />
+    <TextField source="type_class" />
+    <TextField source="title_it" />
+    <TextField source="title_en" />
+  </Datagrid>
+</List>
+```
+
+Filters i dati
+
+```javascript
+<List
+  filter={{
+    "status": "closed",
+  }}
+>
+  <Datagrid rowClick="edit">
+    <TextField source="action_name" />
+    <TextField source="type_class" />
+    <TextField source="title_it" />
+    <TextField source="title_en" />
+  </Datagrid>
+</List>
+```
+
 ## Authentication
+
 This client allows you to set Authentication for login
 
-``` javascript
-
+```javascript
 // Pass it as the second parameter after the base URL.
 const authProvider = ParseAuth(parseConfig);
 ```
